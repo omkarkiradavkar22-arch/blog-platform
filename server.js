@@ -11,6 +11,9 @@ const app = express();
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+// app.get('/', (req, res) => {
+//   res.sendFile(__dirname + '/public/index.html');
+// });
 
 app.use(session({
     secret: 'secretKey',
@@ -28,5 +31,5 @@ app.use('/auth', authRoutes);
 app.use('/blog', blogRoutes);
 
 app.listen(3000, () => {
-    console.log("Server running on http://Blog_writing:3000");
+    console.log("Server running on http://localhost:3000");
 });

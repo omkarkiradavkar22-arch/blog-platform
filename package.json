@@ -1,7 +1,7 @@
 {
   "name": "blog-platform",
   "version": "1.0.0",
-  "description": "",
+  "description": "A secure Blog Management System built using Node.js, Express.js, and MongoDB with user authentication, session management, and CRUD operations for blog posts.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,5 +17,14 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "mongoose": "^9.2.1"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omkarkiradavkar22-arch/blog-platform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/omkarkiradavkar22-arch/blog-platform/issues"
+  },
+  "homepage": "https://github.com/omkarkiradavkar22-arch/blog-platform#readme"
 }
