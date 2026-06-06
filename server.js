@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -11,9 +12,9 @@ const app = express();
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-// app.get('/', (req, res) => {
-//   res.sendFile(__dirname + '/public/index.html');
-// });
+ app.get('/', (req, res) => {
+   res.sendFile(__dirname + '/public/index.html');
+});
 
 app.use(session({
     secret: 'secretKey',
@@ -22,14 +23,23 @@ app.use(session({
 }));
 
 // MongoDB Connection
-mongoose.connect('mongodb://127.0.0.1:27017/blogDB')
-.then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+// mongoose.connect(process.env.MONGO_URI)
+// .then(() => console.log("MongoDB Connected"))
+// .catch(err => console.log(err));
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Connected");
+  })
+  .catch((err) => {
+    console.log("MongoDB Error:", err);
+  });
 
 // Routes
 app.use('/auth', authRoutes);
 app.use('/blog', blogRoutes);
 
-app.listen(3000, () => {
+const PORT=process.env.PORT||3000;
+app.listen(PORT, () => {
     console.log("Server running on http://localhost:3000");
 });
