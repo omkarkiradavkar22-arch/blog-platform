@@ -24,10 +24,7 @@ app.use(session({
     saveUninitialized: false
 }));
 
-// MongoDB Connection
-// mongoose.connect(process.env.MONGO_URI)
-// .then(() => console.log("MongoDB Connected"))
-// .catch(err => console.log(err));
+
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
