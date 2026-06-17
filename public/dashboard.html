@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/style2.css">
+</head>
+<body>
+
+<div class="container">
+        <h2>Welcome to Dashboard 🎉</h2>
+
+    <h3>Add New Blog</h3>
+
+    <form action="/blog/add" method="POST">
+        <input type="text" name="title" placeholder="Blog Title" required>
+        <textarea name="content" placeholder="Write your blog..." required></textarea>
+        <button type="submit">Add Blog</button>
+    </form>
+
+    <br>
+
+    <a href="/blog/all">View All Blogs</a>
+    <br><br>
+    <a href="/auth/logout" class="logout">Logout</a>
+
+</div>
+
+</body>
+</html>
