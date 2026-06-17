@@ -12,7 +12,7 @@ router.post('/add', isLoggedIn, async (req, res) => {
     });
 
     await newBlog.save();
-    res.redirect('http://localhost:3000/blog/all');
+    res.redirect('https://blog-platform-b.onrender.com/blog/all');
 });
 
 router.get('/all', isLoggedIn, async (req, res) => {
@@ -55,7 +55,7 @@ router.get('/all', isLoggedIn, async (req, res) => {
 
 
             <h1>All Blogs</h1>
-            <a href="http://localhost:5500/dashboard.html" class="back-button">Back</a>
+            <a href="https://blog-platform-1-d651.onrender.com/dashboard.html" class="back-button">Back</a>
              ${blogList}
 
         </div>
@@ -103,7 +103,7 @@ router.post('/delete/:id', isLoggedIn, async (req, res) => {
         author: req.session.userId
     });
 
-    res.redirect('http://localhost:3000/blog/all');
+    res.redirect('https://blog-platform-b.onrender.com/blog/all');
 });
 
 // Update Blog
@@ -117,7 +117,7 @@ router.post('/update/:id', isLoggedIn, async (req, res) => {
         }
     );
 
-    res.redirect('http://localhost:3000/blog/all');
+    res.redirect('https://blog-platform-b.onrender.com/blog/all');
 });
 
 module.exports = router;
