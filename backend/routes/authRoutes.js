@@ -1,41 +1,123 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const User = require('../models/User');
+const Blog = require('../models/Blog');
+const isLoggedIn = require('../middleware/authMiddleware');
 
-// Register
-router.post('/register', async (req, res) => {
-    const { name, email, password } = req.body;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = new User({
-        name,
-        email,
-        password: hashedPassword
+// Add Blog
+router.post('/add', isLoggedIn, async (req, res) => {
+    const newBlog = new Blog({
+        title: req.body.title,
+        content: req.body.content,
+        author: req.session.userId
     });
 
-    await newUser.save();
-    res.redirect('/login.html');
+    await newBlog.save();
+    res.redirect('/blog/all');
 });
 
-// Login
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+router.get('/all', isLoggedIn, async (req, res) => {
 
-    const user = await User.findOne({ email });
+    const blogs = await Blog.find();
 
-    if (user && await bcrypt.compare(password, user.password)) {
-        req.session.userId = user._id;
-        res.redirect('/dashboard.html');
-    } else {
-        res.send("Invalid Credentials");
-    }
+    let blogList = blogs.map(blog => {
+
+        let buttons = "";
+
+        if (blog.author && blog.author.toString() === req.session.userId) {
+            buttons = `
+                <a href="/blog/edit/${blog._id}">
+                    <button>Edit</button>
+                </a>
+
+                <form action="/blog/delete/${blog._id}" method="POST" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            `;
+        }
+
+        return `
+        <div class="blog-card">
+            <h2>${blog.title}</h2>
+            <p>${blog.content}</p>
+            ${buttons}
+        </div>
+        `;
+    }).join("");
+
+    res.send(`
+    <html>
+    <head>
+        <title>All Blogs</title>
+        <link rel="stylesheet" href="/css/style1.css">
+    </head>
+    <body>
+        <div class="container">
+
+
+            <h1>All Blogs</h1>
+            <a href="https://blog-platform-1-d651.onrender.com/dashboard.html" class="back-button">Back</a>
+             ${blogList}
+
+        </div>
+    </body>
+    </html>
+    `);
 });
 
-router.get('/logout', (req, res) => {
-    req.session.destroy();
-    res.redirect('/login.html');
+// Show Edit Page
+router.get('/edit/:id', isLoggedIn, async (req, res) => {
+
+    const blog = await Blog.findOne({
+        _id: req.params.id,
+        author: req.session.userId
+    });
+
+    res.send(`
+    <html>
+    <head>
+        <title>Edit Blog</title>
+        <link rel="stylesheet" href="/css/style1.css">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Edit Blog</h2>
+
+            <form action="/blog/update/${blog._id}" method="POST">
+                <input type="text" name="title" value="${blog.title}" required>
+                <textarea name="content" required>${blog.content}</textarea>
+                <button type="submit">Save</button>
+            </form>
+
+            <br>
+            <a href="/blog/all">Back</a>
+        </div>
+    </body>
+    </html>
+    `);
+});
+
+// Delete Blog
+router.post('/delete/:id', isLoggedIn, async (req, res) => {
+    await Blog.findOneAndDelete({
+        _id: req.params.id,
+        author: req.session.userId
+    });
+
+    res.redirect('/blog/all');
+});
+
+// Update Blog
+router.post('/update/:id', isLoggedIn, async (req, res) => {
+
+    await Blog.findOneAndUpdate(
+        { _id: req.params.id, author: req.session.userId },
+        {
+            title: req.body.title,
+            content: req.body.content
+        }
+    );
+
+    res.redirect('/blog/all');
 });
 
 module.exports = router;
