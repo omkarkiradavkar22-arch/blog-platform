@@ -22,9 +22,6 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-
-
-
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB Connected");
