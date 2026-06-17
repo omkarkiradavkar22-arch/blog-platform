@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
     });
 
     await newUser.save();
-    res.redirect('https://blog-platform-1-d651.onrender.com/login.html');
+    res.redirect('/login.html');
 });
 
 // Login
@@ -27,7 +27,7 @@ router.post('/login', async (req, res) => {
 
     if (user && await bcrypt.compare(password, user.password)) {
         req.session.userId = user._id;
-        res.redirect('https://blog-platform-1-d651.onrender.com/dashboard.html');
+        res.redirect('/dashboard.html');
     } else {
         res.send("Invalid Credentials");
     }
@@ -35,7 +35,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('https://blog-platform-1-d651.onrender.com/login.html');
+    res.redirect('/login.html');
 });
 
 module.exports = router;
